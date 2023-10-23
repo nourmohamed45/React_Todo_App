@@ -1,0 +1,90 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  background-color: #242424;
+}
+
+
+/* Define scrollbar track */
+::-webkit-scrollbar {
+  width: 10px; /* Set the width of the scrollbar */
+}
+
+/* Define scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background: #3f51b5; /* Set the color of the thumb */
+  border-radius: 5px; /* Add rounded corners to the thumb */
+}
+
+/* Define scrollbar track on hover */
+::-webkit-scrollbar:hover {
+  width: 12px; /* Change the width on hover */
+}
+
+/* Define scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Change the thumb color on hover */
+}
+
+/* Define scrollbar button (arrows) */
+::-webkit-scrollbar-button {
+  display: none; /* Hide scrollbar buttons (arrows) */
+}
+
+/* Define scrollbar corner (between vertical and horizontal scrollbar) */
+::-webkit-scrollbar-corner {
+  background: #ccc; /* Set the color of the corner */
+}
+
+
+
+
+
+/* ====== Custom Fonts ====== */
+
+@font-face {
+  font-family: CairoFont;
+  src: url("../public/fonts/Cairo-Black.ttf");
+  font-weight: 900;
+}
+@font-face {
+  font-family: CairoFont;
+  src: url("../public/fonts/Cairo-ExtraBold.ttf");
+  font-weight: 800;
+}
+@font-face {
+  font-family: CairoFont;
+  src: url("../public/fonts/Cairo-Bold.ttf");
+  font-weight: 700;
+}
+@font-face {
+  font-family: CairoFont;
+  src: url("../public/fonts/Cairo-SemiBold.ttf");
+  font-weight: 600;
+}
+@font-face {
+  font-family: CairoFont;
+  src: url("../public/fonts/Cairo-Medium.ttf");
+  font-weight: 500;
+}
+@font-face {
+  font-family: CairoFont;
+  src: url("../public/fonts/Cairo-Regular.ttf");
+  font-weight: 400;
+}
+@font-face {
+  font-family: CairoFont;
+  src: url("../public/fonts/Cairo-Light.ttf");
+  font-weight: 300;
+}
+@font-face {
+  font-family: CairoFont;
+  src: url("../public/fonts/Cairo-ExtraLight.ttf");
+  font-weight: 200;
+}
+
+/* ======// Custom Fonts //====== */

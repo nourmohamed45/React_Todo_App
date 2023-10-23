@@ -1,0 +1,53 @@
+#header {
+  position: relative;
+  color: #242424;
+  width: 100%;
+  text-align: center;
+  font-size: 40px;
+}
+
+#header::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #919191;
+  bottom: 10px;
+  left: 0;
+}
+
+#headBtns {
+  text-align: center;
+  margin: 10px 0px 30px ;
+}
+/*
+#headBtn button {
+  padding: 5px;
+} */
+
+.head-btn {
+  color: #242424 !important;
+  border-color: #a1a1a1 !important; 
+}
+
+.card-container {
+  transition: .2s linear !important;
+}
+
+.card-container:hover {
+  padding: 10px 0px;
+  box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.4);
+}
+
+.iconButton {
+  transition: all .2s linear !important;
+}
+
+.iconButton:hover {
+  background-color: #c8c8c8 !important;
+  box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.4);
+}
+
+.MuiCardActions-root {
+  padding: 0 !important;
+}
