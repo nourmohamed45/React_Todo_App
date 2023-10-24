@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
+// import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 
@@ -25,9 +25,8 @@ import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 // React
 import PropTypes from "prop-types";
 
-export default function Todo({ todo }) {
+export default function Todo({ todo, showDeleteDialog }) {
   const { todos, setTodos } = useContext(TodosContext);
-  const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [editValue, setEditValue] = useState({ title: "", details: "" });
   // Event handlers
@@ -42,11 +41,7 @@ export default function Todo({ todo }) {
     localStorage.setItem('todos', JSON.stringify(updatedTodos));
   }
 
-  function handleDeleteConfirm(id) {
-    const updatedTodos = [...todos].filter((todo) => todo.id != id);
-    setTodos(updatedTodos);
-    localStorage.setItem('todos', JSON.stringify(updatedTodos));
-  }
+
 
   function handleEditConfirm(id) {
     const updatedTodos = [...todos].map((todo) => {
@@ -65,12 +60,10 @@ export default function Todo({ todo }) {
 
   // Delete Modal
   const handleClickOpenDelete = () => {
-    setOpen(true);
+    showDeleteDialog(todo);
   };
 
-  const handleCloseDelete = () => {
-    setOpen(false);
-  };
+
 
   // Edit Modal
   const handleClickOpenEdit = (id) => {
@@ -151,38 +144,8 @@ export default function Todo({ todo }) {
           </Button>
         </DialogActions>
       </Dialog>
-
       {/*=== Edit modal ===*/}
-      {/* delete modal */}
-      <Dialog
-        dir="rtl"
-        open={open}
-        onClose={handleCloseDelete}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          هل أنت متأكد من رغبتك في حذف المهمة ؟
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            لا يمكنك التراجع عن الحذف بعد إتمامه.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDelete}>إغلاق</Button>
-          <Button
-            style={{ color: "#c62828" }}
-            onClick={() => {
-              handleDeleteConfirm(todo.id);
-            }}
-            autoFocus
-          >
-            حذف
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/*=== delete modal ===*/}
+      
       <Card
         className="card-container"
         sx={{ width: "100%", minWidth: 275 }}
@@ -280,4 +243,5 @@ export default function Todo({ todo }) {
 Todo.propTypes = {
   todo: PropTypes.object,
   handleCheck: PropTypes.func,
+  showDeleteDialog: PropTypes.func,
 };
