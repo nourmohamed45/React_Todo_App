@@ -28,7 +28,7 @@ import PropTypes from "prop-types";
 export default function Todo({ todo, showDeleteDialog }) {
   const { todos, setTodos } = useContext(TodosContext);
   const [openEdit, setOpenEdit] = useState(false);
-  const [editValue, setEditValue] = useState({ title: "", details: "" });
+  const [editValue, setEditValue] = useState({ title: todo.title, details: todo.details });
   // Event handlers
   function handleCheckout() {
     const updatedTodos = todos.map((t) => {
@@ -66,12 +66,7 @@ export default function Todo({ todo, showDeleteDialog }) {
 
 
   // Edit Modal
-  const handleClickOpenEdit = (id) => {
-    const selectedTodo = todos.find((todo) => todo.id === id);
-    setEditValue({
-      title: selectedTodo.title,
-      details: selectedTodo.details,
-    });
+  const handleClickOpenEdit = () => {
     setOpenEdit(true);
   };
 
@@ -102,7 +97,7 @@ export default function Todo({ todo, showDeleteDialog }) {
             style={{ color: "red" }}
             autoFocus
             margin="dense"
-            id="name"
+            id="title"
             label="العنوان"
             type="text"
             fullWidth
@@ -121,7 +116,7 @@ export default function Todo({ todo, showDeleteDialog }) {
             style={{ color: "red" }}
             autoFocus
             margin="dense"
-            id="name"
+            id="details"
             label="التفاصيل"
             type="text"
             fullWidth
@@ -201,7 +196,7 @@ export default function Todo({ todo, showDeleteDialog }) {
             {/* Edit Icon */}
             <IconButton
               onClick={() => {
-                handleClickOpenEdit(todo.id);
+                handleClickOpenEdit();
               }}
               className="iconButton"
               style={{
