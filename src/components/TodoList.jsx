@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useContext, useEffect, useMemo } from "react";
 import { TodosContext } from "../contexts/todosContext";
+import { ToastContext } from "../contexts/ToastContext";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Button from "@mui/material/Button";
@@ -27,6 +28,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
+  const { showHideToast } = useContext(ToastContext);
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
@@ -82,6 +84,7 @@ export default function TodoList() {
     setTodos(updatedTodos);
     localStorage.setItem('todos', JSON.stringify(updatedTodos));
     handleCloseDelete();
+    showHideToast("تم الحذف بنجاح")
   }
 
   function handleInputField(event) {
@@ -101,6 +104,7 @@ export default function TodoList() {
       setTodos(updatedTodos);
       localStorage.setItem("todos", JSON.stringify(updatedTodos));
       setInputValue("");
+      showHideToast("تم إضافة مهمة جديدة")
     }
   }
 

@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 // Hooks
 import { useContext, useState } from "react";
 import { TodosContext } from "../contexts/todosContext";
-
+import { ToastContext } from "../contexts/ToastContext";
 // Modal
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -27,21 +27,28 @@ import PropTypes from "prop-types";
 
 export default function Todo({ todo, showDeleteDialog }) {
   const { todos, setTodos } = useContext(TodosContext);
+  const { showHideToast } = useContext(ToastContext);
   const [openEdit, setOpenEdit] = useState(false);
-  const [editValue, setEditValue] = useState({ title: todo.title, details: todo.details });
+  const [editValue, setEditValue] = useState({
+    title: todo.title,
+    details: todo.details,
+  });
   // Event handlers
   function handleCheckout() {
     const updatedTodos = todos.map((t) => {
       if (t.id === todo.id) {
+        if (!t.isCompleted) {
+          showHideToast("تم الإضافة إلي المنجز");
+        } else {
+          showHideToast("تم الإضافة الي غير المنجز");
+        }
         return { ...t, isCompleted: !t.isCompleted };
       }
       return t;
     });
     setTodos(updatedTodos);
-    localStorage.setItem('todos', JSON.stringify(updatedTodos));
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
   }
-
-
 
   function handleEditConfirm(id) {
     const updatedTodos = [...todos].map((todo) => {
@@ -53,7 +60,8 @@ export default function Todo({ todo, showDeleteDialog }) {
 
     setTodos(updatedTodos);
     setOpenEdit(false);
-    localStorage.setItem('todos', JSON.stringify(updatedTodos));
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    showHideToast("تم التعديل بنجاح");
   }
 
   //======== Modals  =========
@@ -62,8 +70,6 @@ export default function Todo({ todo, showDeleteDialog }) {
   const handleClickOpenDelete = () => {
     showDeleteDialog(todo);
   };
-
-
 
   // Edit Modal
   const handleClickOpenEdit = () => {
@@ -80,12 +86,15 @@ export default function Todo({ todo, showDeleteDialog }) {
     <>
       {/* Edit modal */}
       <Dialog
-          onKeyPress={(e) => {
-            if (e.key === "Enter") {
-              handleEditConfirm(todo.id);
-            }
-          }}
-          dir="rtl" open={openEdit} onClose={handleCloseEdit}>
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            handleEditConfirm(todo.id);
+          }
+        }}
+        dir="rtl"
+        open={openEdit}
+        onClose={handleCloseEdit}
+      >
         <DialogTitle>تعديل المهمة</DialogTitle>
         <DialogContent>
           <TextField
@@ -140,7 +149,7 @@ export default function Todo({ todo, showDeleteDialog }) {
         </DialogActions>
       </Dialog>
       {/*=== Edit modal ===*/}
-      
+
       <Card
         className="card-container"
         sx={{ width: "100%", minWidth: 275 }}
@@ -157,7 +166,12 @@ export default function Todo({ todo, showDeleteDialog }) {
           <div>
             <Typography
               variant="div"
-              sx={{ color: "white", fontSize: "20px", fontWeight: "bold", textDecoration: todo.isCompleted? "line-through": "none" }}
+              sx={{
+                color: "white",
+                fontSize: "20px",
+                fontWeight: "bold",
+                textDecoration: todo.isCompleted ? "line-through" : "none",
+              }}
               color="text.secondary"
               gutterBottom
             >
