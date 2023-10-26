@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useContext, useEffect, useMemo } from "react";
 import { TodosContext } from "../contexts/todosContext";
-import { ToastContext } from "../contexts/ToastContext";
+import { useToast } from "./ToastHelpers";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Button from "@mui/material/Button";
@@ -20,28 +19,25 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 
-
-
-
-
-
-
 export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
-  const { showHideToast } = useContext(ToastContext);
+  const { showHideToast } = useToast();
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
   const [dialogTodo, setDialogTodo] = useState(null);
+  
+
   useEffect(() => {
     const storageTodos = JSON.parse(localStorage.getItem("todos")) ?? [];
     if (storageTodos) {
       setTodos(storageTodos);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // filteration Arrays
 
+  // filteration Arrays
   const completedTodos = useMemo(() => {
     return todos.filter((todo) => {
       return todo.isCompleted;
@@ -66,13 +62,11 @@ export default function TodoList() {
 
   // Modal
 
-
   function showDeleteDialog(todo) {
     setDialogTodo(todo)
     // alert(todo.id)
     setOpen(true)
   }
-
 
   const handleCloseDelete = () => {
     setOpen(false);

@@ -1,10 +1,9 @@
 import "./App.css";
 import TodoList from "./components/TodoList";
 import Container from "@mui/material/Container";
-import MySnackBar from "./components/MySnackBar";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { TodosContext } from "./contexts/todosContext";
-import { ToastContext } from "./contexts/ToastContext";
+import { ToastProvider } from "./contexts/ToastContext";
 import { useState } from "react";
 // npm dependencies
 import { v4 as uuidv4 } from "uuid";
@@ -43,21 +42,11 @@ const intialTodo = [
 
 function App() {
   const [todos, setTodos] = useState(intialTodo);
-  const [openToast, setopenToast] = useState(false);
-  const [toastMessage, settoastMessage] = useState("");
-  const showHideToast = (toastMessage) => {
-    settoastMessage(toastMessage);
-    setopenToast(true);
-    setTimeout(() => {
-      setopenToast(false);
-    }, 2000);
-    // return message;
-  };
 
   return (
     <ThemeProvider theme={theme}>
       <TodosContext.Provider value={{ todos: todos, setTodos: setTodos }}>
-        <ToastContext.Provider value={{showHideToast}}>
+        <ToastProvider>
           <div
             style={{
               fontFamily: "CairoFont",
@@ -68,12 +57,11 @@ function App() {
               alignItems: "center",
             }}
           >
-            <MySnackBar openToast={openToast} toastMessage={toastMessage} />
             <Container maxWidth="sm">
               <TodoList />
             </Container>
           </div>
-        </ToastContext.Provider>
+        </ToastProvider>
       </TodosContext.Provider>
     </ThemeProvider>
   );

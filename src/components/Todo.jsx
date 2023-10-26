@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 // Hooks
 import { useContext, useState } from "react";
 import { TodosContext } from "../contexts/todosContext";
-import { ToastContext } from "../contexts/ToastContext";
+import { useToast } from "./ToastHelpers";
 // Modal
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -27,7 +27,7 @@ import PropTypes from "prop-types";
 
 export default function Todo({ todo, showDeleteDialog }) {
   const { todos, setTodos } = useContext(TodosContext);
-  const { showHideToast } = useContext(ToastContext);
+  const { showHideToast } = useToast();
   const [openEdit, setOpenEdit] = useState(false);
   const [editValue, setEditValue] = useState({
     title: todo.title,
