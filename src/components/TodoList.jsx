@@ -1,39 +1,33 @@
-import { useState, useContext, useEffect, useMemo, useReducer } from "react";
-import { TodosContext } from "../contexts/todosContext";
-import { useToast } from "./ToastHelpers";
+import { useState, useEffect, useMemo, useContext } from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Todo from "./Todo";
-// import { v4 as uuidv4 } from "uuid";
-import TodoReducer from "../reducers/TodoReducer";
 
 // Import Dialog
-
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-
+import { TodosContext } from "../contexts/todosContext";
+import { ToastContext } from "../contexts/ToastContext";
 
 export default function TodoList() {
-  // const { todos2, setTodos } = useContext(TodosContext);
-  const [todos, dispatch] = useReducer(TodoReducer, []);
-  const { showHideToast } = useToast();
+  const { todos, dispatch } = useContext(TodosContext);
+  const { showHideToast } = useContext(ToastContext);
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
   const [dialogTodo, setDialogTodo] = useState(null);
-  
 
   useEffect(() => {
-    dispatch({type: "get"})
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch({ type: "get" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   // filteration Arrays
   const completedTodos = useMemo(() => {
@@ -61,9 +55,13 @@ export default function TodoList() {
   // Modal
 
   function showDeleteDialog(todo) {
-    setDialogTodo(todo)
-    // alert(todo.id)
-    setOpen(true)
+    setDialogTodo(todo);
+    setOpen(true);
+  }
+
+  function showEditDialog(todo) {
+    setDialogTodo(todo);
+    setOpenEdit(true);
   }
 
   const handleCloseDelete = () => {
@@ -73,10 +71,23 @@ export default function TodoList() {
   function handleDeleteConfirm() {
     dispatch({
       type: "delete",
-      payload: dialogTodo
-    })
+      payload: dialogTodo,
+    });
     handleCloseDelete();
-    showHideToast("تم الحذف بنجاح")
+    showHideToast("تم الحذف بنجاح");
+  }
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
+
+  function handleEditConfirm(dialogTodo) {
+    dispatch({
+      type: "edit",
+      payload: dialogTodo,
+    });
+    showHideToast("تم التعديل بنجاح");
+    setOpenEdit(false);
   }
 
   function handleInputField(event) {
@@ -89,10 +100,10 @@ export default function TodoList() {
         type: "add",
         payload: {
           title: inputValue,
-        }
-      })
+        },
+      });
       setInputValue("");
-      showHideToast("تم إضافة مهمة جديدة")
+      showHideToast("تم إضافة مهمة جديدة");
     }
   }
 
@@ -101,11 +112,84 @@ export default function TodoList() {
   }
 
   const todoList = todosToBeRendered.map((todo) => {
-    return <Todo key={todo.id} todo={todo} showDeleteDialog={showDeleteDialog} />;
+    return (
+      <Todo
+        key={todo.id}
+        todo={todo}
+        showDeleteDialog={showDeleteDialog}
+        showEditDialog={showEditDialog}
+      />
+    );
   });
 
   return (
     <>
+      {/* Edit modal */}
+      <Dialog
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            handleEditConfirm(dialogTodo);
+          }
+        }}
+        dir="rtl"
+        open={openEdit}
+        onClose={handleCloseEdit}
+      >
+        <DialogTitle>تعديل المهمة</DialogTitle>
+        <DialogContent>
+          <TextField
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleEditConfirm(dialogTodo);
+              }
+            }}
+            style={{ color: "red" }}
+            autoFocus
+            margin="dense"
+            id="title"
+            label="العنوان"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={dialogTodo?.title || ""} // Add a conditional check here
+            onChange={(event) =>
+              setDialogTodo({ ...dialogTodo, title: event.target.value })
+            }
+          />
+
+          <TextField
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleEditConfirm(dialogTodo);
+              }
+            }}
+            style={{ color: "red" }}
+            autoFocus
+            margin="dense"
+            id="details"
+            label="التفاصيل"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={dialogTodo?.details || ""} // Add a conditional check here
+            onChange={(event) =>
+              setDialogTodo({ ...dialogTodo, details: event.target.value })
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseEdit}>إلغاء</Button>
+          <Button
+            style={{ color: "#8bc34a" }}
+            onClick={() => {
+              handleEditConfirm(dialogTodo);
+            }}
+          >
+            تعديل
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/*=== Edit modal ===*/}
       {/* delete modal */}
       <Dialog
         dir="rtl"

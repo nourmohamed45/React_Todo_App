@@ -3,19 +3,6 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
-// Hooks
-import { useContext, useState } from "react";
-import { TodosContext } from "../contexts/todosContext";
-import { useToast } from "./ToastHelpers";
-// Modal
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-// import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
-
 // Icons
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -24,44 +11,27 @@ import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 
 // React
 import PropTypes from "prop-types";
+import { useContext } from "react";
+import { TodosContext } from "../contexts/todosContext";
+import { ToastContext } from "../contexts/ToastContext";
 
-export default function Todo({ todo, showDeleteDialog }) {
-  const { todos, setTodos } = useContext(TodosContext);
-  const { showHideToast } = useToast();
-  const [openEdit, setOpenEdit] = useState(false);
-  const [editValue, setEditValue] = useState({
-    title: todo.title,
-    details: todo.details,
-  });
+export default function Todo({ todo, showDeleteDialog, showEditDialog }) {
+  const { todos, dispatch } = useContext(TodosContext);
+  const { showHideToast } = useContext(ToastContext);
+
   // Event handlers
   function handleCheckout() {
-    const updatedTodos = todos.map((t) => {
-      if (t.id === todo.id) {
-        if (!t.isCompleted) {
-          showHideToast("تم الإضافة إلي المنجز");
-        } else {
-          showHideToast("تم الإضافة الي غير المنجز");
-        }
-        return { ...t, isCompleted: !t.isCompleted };
-      }
-      return t;
+    if (!todo.isCompleted) {
+      showHideToast("تم الإضافة إلي المنجز");
+    } else {
+      showHideToast("تم الإضافة الي غير المنجز");
+    }
+    dispatch({
+      type: "check",
+      payload: {
+        id: todo.id,
+      },
     });
-    setTodos(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
-  }
-
-  function handleEditConfirm(id) {
-    const updatedTodos = [...todos].map((todo) => {
-      if (todo.id == id) {
-        return { ...todo, title: editValue.title, details: editValue.details };
-      }
-      return todo;
-    });
-
-    setTodos(updatedTodos);
-    setOpenEdit(false);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
-    showHideToast("تم التعديل بنجاح");
   }
 
   //======== Modals  =========
@@ -73,83 +43,13 @@ export default function Todo({ todo, showDeleteDialog }) {
 
   // Edit Modal
   const handleClickOpenEdit = () => {
-    setOpenEdit(true);
-  };
-
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
+    showEditDialog(todo);
   };
 
   //=== Event handlers ===
 
   return (
     <>
-      {/* Edit modal */}
-      <Dialog
-        onKeyPress={(e) => {
-          if (e.key === "Enter") {
-            handleEditConfirm(todo.id);
-          }
-        }}
-        dir="rtl"
-        open={openEdit}
-        onClose={handleCloseEdit}
-      >
-        <DialogTitle>تعديل المهمة</DialogTitle>
-        <DialogContent>
-          <TextField
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                handleEditConfirm(todo.id);
-              }
-            }}
-            style={{ color: "red" }}
-            autoFocus
-            margin="dense"
-            id="title"
-            label="العنوان"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={editValue.title}
-            onChange={(event) =>
-              setEditValue({ ...editValue, title: event.target.value })
-            }
-          />
-          <TextField
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                handleEditConfirm(todo.id);
-              }
-            }}
-            style={{ color: "red" }}
-            autoFocus
-            margin="dense"
-            id="details"
-            label="التفاصيل"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={editValue.details}
-            onChange={(event) =>
-              setEditValue({ ...editValue, details: event.target.value })
-            }
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseEdit}>إلغاء</Button>
-          <Button
-            style={{ color: "#8bc34a" }}
-            onClick={() => {
-              handleEditConfirm(todo.id);
-            }}
-          >
-            تعديل
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/*=== Edit modal ===*/}
-
       <Card
         className="card-container"
         sx={{ width: "100%", minWidth: 275 }}
@@ -253,4 +153,5 @@ Todo.propTypes = {
   todo: PropTypes.object,
   handleCheck: PropTypes.func,
   showDeleteDialog: PropTypes.func,
+  showEditDialog: PropTypes.func,
 };

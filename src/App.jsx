@@ -2,11 +2,8 @@ import "./App.css";
 import TodoList from "./components/TodoList";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material";
-import { TodosContext } from "./contexts/todosContext";
+import TodosProvider from "./contexts/todosContext";
 import { ToastProvider } from "./contexts/ToastContext";
-import { useState } from "react";
-// npm dependencies
-import { v4 as uuidv4 } from "uuid";
 
 const theme = createTheme({
   typography: {
@@ -19,33 +16,10 @@ const theme = createTheme({
   },
 });
 
-const intialTodo = [
-  {
-    id: uuidv4(),
-    title: "قراءة 3 كتب",
-    details: "الإنجاز قبل نهاية الشهر",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: " اللعب مع الاصدقاء",
-    details: "لعب كرة القدم في نادي الشونة",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "الجلوس مع الاهل",
-    details: "مشاهدة مسلسل بابا المجال مع عائلتي",
-    isCompleted: false,
-  },
-];
-
 function App() {
-  const [todos, setTodos] = useState(intialTodo);
-
   return (
     <ThemeProvider theme={theme}>
-      <TodosContext.Provider value={{ todos: todos, setTodos: setTodos }}>
+      <TodosProvider>
         <ToastProvider>
           <div
             style={{
@@ -62,7 +36,7 @@ function App() {
             </Container>
           </div>
         </ToastProvider>
-      </TodosContext.Provider>
+      </TodosProvider>
     </ThemeProvider>
   );
 }

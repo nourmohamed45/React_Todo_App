@@ -18,7 +18,7 @@
 
 #headBtns {
   text-align: center;
-  margin: 10px 0px 30px ;
+  margin: 10px 0px 30px;
 }
 /*
 #headBtn button {
@@ -27,11 +27,11 @@
 
 .head-btn {
   color: #242424 !important;
-  border-color: #a1a1a1 !important; 
+  border-color: #a1a1a1 !important;
 }
 
 .card-container {
-  transition: .2s linear !important;
+  transition: 0.2s linear !important;
 }
 
 .card-container:hover {
@@ -40,7 +40,7 @@
 }
 
 .iconButton {
-  transition: all .2s linear !important;
+  transition: all 0.2s linear !important;
 }
 
 .iconButton:hover {

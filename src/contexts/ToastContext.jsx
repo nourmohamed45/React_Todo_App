@@ -2,8 +2,6 @@ import { createContext, useState } from "react";
 import PropTypes from "prop-types"; // Import PropTypes
 import MySnackBar from "../components/MySnackBar";
 
-
-
 export const ToastContext = createContext({});
 
 export const ToastProvider = ({ children }) => {
@@ -25,10 +23,6 @@ export const ToastProvider = ({ children }) => {
     </ToastContext.Provider>
   );
 };
-
-// export const useToast = () => {
-//   return useContext(ToastContext)
-// }
 
 ToastProvider.propTypes = {
   children: PropTypes.node.isRequired, // Use PropTypes.node for the children prop

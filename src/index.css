@@ -8,7 +8,6 @@
   background-color: #242424;
 }
 
-
 /* Define scrollbar track */
 ::-webkit-scrollbar {
   width: 10px; /* Set the width of the scrollbar */
@@ -39,10 +38,6 @@
 ::-webkit-scrollbar-corner {
   background: #ccc; /* Set the color of the corner */
 }
-
-
-
-
 
 /* ====== Custom Fonts ====== */
 
